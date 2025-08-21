@@ -15,6 +15,7 @@ import 'package:marketky/views/widgets/custom_icon_button_widget.dart';
 import 'package:marketky/views/widgets/dummy_search_widget_1.dart';
 import 'package:marketky/views/widgets/flashsale_countdown_tile.dart';
 import 'package:marketky/views/widgets/item_card.dart';
+import '../widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -87,7 +88,7 @@ class _HomePageState extends State<HomePage> {
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
         children: [
-          // Section 1
+          // 🔹 Hero Section
           Container(
             height: 190,
             width: MediaQuery.of(context).size.width,
@@ -159,7 +160,8 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          // Section 2 - category
+
+          // 🔹 Category Section
           Container(
             width: MediaQuery.of(context).size.width,
             color: AppColor.secondary,
@@ -219,28 +221,8 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          // Section 3 - banner
-          // Container(
-          //   height: 106,
-          //   padding: EdgeInsets.symmetric(vertical: 16),
-          //   child: ListView.separated(
-          //     padding: EdgeInsets.symmetric(horizontal: 16),
-          //     scrollDirection: Axis.horizontal,
-          //     itemCount: 3,
-          //     separatorBuilder: (context, index) {
-          //       return SizedBox(width: 16);
-          //     },
-          //     itemBuilder: (context, index) {
-          //       return Container(
-          //         width: 230,
-          //         height: 106,
-          //         decoration: BoxDecoration(color: AppColor.primarySoft, borderRadius: BorderRadius.circular(15)),
-          //       );
-          //     },
-          //   ),
-          // ),
 
-          // Section 4 - Flash Sale
+          // 🔹 Flash Sale Section
           Container(
             margin: EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -265,66 +247,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: FlashsaleCountdownTile(
-                              digit: hours[0],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: FlashsaleCountdownTile(
-                              digit: hours[1],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: Text(
-                              ':',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: FlashsaleCountdownTile(
-                              digit: minutes[0],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: FlashsaleCountdownTile(
-                              digit: minutes[1],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: Text(
-                              ':',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: FlashsaleCountdownTile(
-                              digit: seconds[0],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: FlashsaleCountdownTile(
-                              digit: seconds[1],
-                            ),
-                          ),
+                          FlashsaleCountdownTile(digit: hours[0]),
+                          FlashsaleCountdownTile(digit: hours[1]),
+                          Text(":", style: TextStyle(color: Colors.white)),
+                          FlashsaleCountdownTile(digit: minutes[0]),
+                          FlashsaleCountdownTile(digit: minutes[1]),
+                          Text(":", style: TextStyle(color: Colors.white)),
+                          FlashsaleCountdownTile(digit: seconds[0]),
+                          FlashsaleCountdownTile(digit: seconds[1]),
                         ],
                       ),
                     ],
@@ -343,53 +273,11 @@ class _HomePageState extends State<HomePage> {
                             productData.length,
                             (index) => Padding(
                               padding: const EdgeInsets.only(left: 16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ItemCard(
-                                    product: productData[index],
-                                    titleColor: AppColor.primarySoft,
-                                    priceColor: AppColor.accent,
-                                  ),
-                                  Container(
-                                    width: 180,
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8.0),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              child: LinearProgressIndicator(
-                                                minHeight: 10,
-                                                value: 0.4,
-                                                color: AppColor.accent,
-                                                backgroundColor:
-                                                    AppColor.border,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Icon(
-                                          Icons.local_fire_department,
-                                          color: AppColor.accent,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  // Row(
-                                  //   children: [
-                                  //     Expanded(
-                                  //       child: Container(
-                                  //         color: Colors.amber,
-                                  //         height: 10,
-                                  //       ),
-                                  //     ),
-                                  //   ],
-                                  // ),
-                                ],
+                              child: ProductCard(
+                                name: productData[index].name,
+                                price: productData[index].price,
+                                rating: productData[index].rating ?? 4.0,
+                                imageUrl: productData[index].image,
                               ),
                             ),
                           ),
@@ -402,8 +290,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Section 5 - product list
-
+          // 🔹 Recommendation Section
           Padding(
             padding: EdgeInsets.only(left: 16, top: 16),
             child: Text(
@@ -422,8 +309,11 @@ class _HomePageState extends State<HomePage> {
               runSpacing: 16,
               children: List.generate(
                 productData.length,
-                (index) => ItemCard(
-                  product: productData[index],
+                (index) => ProductCard(
+                  name: productData[index].name,
+                  price: productData[index].price,
+                  rating: productData[index].rating ?? 4.5,
+                  imageUrl: productData[index].image,
                 ),
               ),
             ),
