@@ -25,7 +25,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_svg: ^0.22.0
-  pecahan_rupiah: ^0.0.1
+  intl: ^0.18.1
   smooth_page_indicator: ^1.0.0+2
   smooth_star_rating_null_safety: ^1.0.4
   pin_code_fields: ^7.3.0
