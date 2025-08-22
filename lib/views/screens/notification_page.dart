@@ -13,65 +13,76 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<UserNotification> listNotification = NotificationService.listNotification;
+  final List<UserNotification> listNotification = NotificationService.listNotification;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: MainAppBar(
         cartValue: 2,
         chatValue: 2,
       ),
       body: ListView(
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
-          // Section 1 - Menu
+          // 🔹 Section 1 - Menu
           MenuTileWidget(
             onTap: () {},
             icon: SvgPicture.asset(
               'assets/icons/Discount.svg',
-              color: AppColor.secondary.withOpacity(0.5),
+              color: AppColor.secondary.withOpacity(0.6),
             ),
             title: 'Product Promo',
-            subtitle: 'Lorem ipsum Dolor sit Amet',
+            subtitle: 'Get the latest deals and discounts!',
           ),
           MenuTileWidget(
             onTap: () {},
             icon: SvgPicture.asset(
               'assets/icons/Info Square.svg',
-              color: AppColor.secondary.withOpacity(0.5),
+              color: AppColor.secondary.withOpacity(0.6),
             ),
             title: 'Marketky Info',
-            subtitle: 'Lorem ipsum Dolor sit Amet',
+            subtitle: 'Important updates & news',
           ),
-          // Section 2 - Status ( LIST )
+
+          // 🔹 Section 2 - Orders Status
           Container(
-            width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(vertical: 16),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: EdgeInsets.only(left: 16, bottom: 8),
+                // Title
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, bottom: 8),
                   child: Text(
                     'ORDERS STATUS',
-                    style: TextStyle(color: AppColor.secondary.withOpacity(0.5), letterSpacing: 6 / 100, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.6),
+                      letterSpacing: 1.2,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
                   ),
                 ),
+                // Notification List
                 ListView.builder(
+                  itemCount: listNotification.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return NotificationTile(
                       data: listNotification[index],
-                      onTap: () {},
+                      onTap: () {
+                        // TODO: Implement notification details navigation
+                      },
                     );
                   },
-                  itemCount: listNotification.length,
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
