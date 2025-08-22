@@ -28,15 +28,15 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # Debugging ke liye doctor command
+      - name: Analyze project
+          run: flutter analyze
+      
       - name: Flutter doctor info
         run: flutter doctor -v
 
-      # Debugging ke liye pub outdated
       - name: Check outdated packages
         run: flutter pub outdated || true
 
-      # Debug build first
       - name: Build Android APK (Debug)
         run: flutter build apk --debug
 
