@@ -5,9 +5,9 @@ class Category {
   String name;
   bool featured;
   Category({
-    @required this.name,
-    @required this.iconUrl,
-    @required this.featured,
+    required this.name,
+    required this.iconUrl,
+    required this.featured,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
