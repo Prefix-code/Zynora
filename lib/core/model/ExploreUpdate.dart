@@ -5,8 +5,8 @@ class ExploreUpdate {
   String caption;
 
   ExploreUpdate({
-    this.logoUrl,
-    this.storeName,
+    required this.logoUrl,
+    required this.storeName,
     this.caption,
     this.image,
   });
