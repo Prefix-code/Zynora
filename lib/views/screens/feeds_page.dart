@@ -13,14 +13,20 @@ class FeedsPage extends StatefulWidget {
 }
 
 class _FeedsPageState extends State<FeedsPage> with TickerProviderStateMixin {
-  TabController tabController;
-  List<ExploreItem> listExploreItem = ExploreService.listExploreItem;
-  List<ExploreUpdate> listExploreUpdateItem = ExploreService.listExploreUpdateItem;
+  late TabController tabController;
+  final List<ExploreItem> listExploreItem = ExploreService.listExploreItem;
+  final List<ExploreUpdate> listExploreUpdateItem = ExploreService.listExploreUpdateItem;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -30,68 +36,72 @@ class _FeedsPageState extends State<FeedsPage> with TickerProviderStateMixin {
         cartValue: 2,
         chatValue: 2,
       ),
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        shrinkWrap: true,
+      body: Column(
         children: [
-          // Tabbbar
+          // TabBar
           Container(
-            width: MediaQuery.of(context).size.width,
+            width: double.infinity,
             height: 60,
             color: AppColor.secondary,
             child: TabBar(
-              onTap: (index) {
-                setState(() {
-                  tabController.index = index;
-                });
-              },
               controller: tabController,
               indicatorColor: AppColor.accent,
-              indicatorWeight: 5,
+              indicatorWeight: 4,
+              labelColor: Colors.white,
               unselectedLabelColor: Colors.white.withOpacity(0.5),
-              labelStyle: TextStyle(fontWeight: FontWeight.w500, fontFamily: 'poppins'),
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w400, fontFamily: 'poppins'),
-              tabs: [
-                Tab(
-                  text: 'Update',
-                ),
-                Tab(
-                  text: 'Explore',
-                ),
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Poppins',
+              ),
+              unselectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontFamily: 'Poppins',
+              ),
+              tabs: const [
+                Tab(text: 'Update'),
+                Tab(text: 'Explore'),
               ],
             ),
           ),
-          // Section 2 - Tab View
-          IndexedStack(
-            index: tabController.index,
-            children: [
-              // Tab 1 - Update
-              ListView.separated(
-                itemCount: 2,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return UpdateCardWidget(
-                    data: listExploreUpdateItem[index],
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return SizedBox(
-                    height: 24,
-                  );
-                },
-              ),
-              // Tab 2 - Explore
-              GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                childAspectRatio: 1 / 1,
-                physics: NeverScrollableScrollPhysics(),
-                children: List.generate(listExploreItem.length, (index) {
-                  return ExploreCardWidget(data: listExploreItem[index]);
-                }),
-              ),
-            ],
+
+          // Tab Views
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              physics: const BouncingScrollPhysics(),
+              children: [
+                // Tab 1 - Update
+                ListView.separated(
+                  itemCount: listExploreUpdateItem.length,
+                  padding: const EdgeInsets.all(16),
+                  itemBuilder: (context, index) {
+                    return UpdateCardWidget(
+                      data: listExploreUpdateItem[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 24),
+                ),
+
+                // Tab 2 - Explore
+                GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: listExploreItem.length,
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemBuilder: (context, index) {
+                    return ExploreCardWidget(
+                      data: listExploreItem[index],
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
