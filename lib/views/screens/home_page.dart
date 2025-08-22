@@ -16,13 +16,15 @@ import 'package:marketky/views/widgets/flashsale_countdown_tile.dart';
 import '../widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Category> categoryData = CategoryService.categoryData;
-  List<Product> productData = ProductService.productData;
+  final List<Category> categoryData = CategoryService.categoryData;
+  final List<Product> productData = ProductService.productData;
 
   Timer? flashsaleCountdownTimer;
   Duration flashsaleCountdownDuration = Duration(
@@ -38,22 +40,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   void startTimer() {
-    flashsaleCountdownTimer = Timer.periodic(Duration(seconds: 1), (_) {
+    flashsaleCountdownTimer = Timer.periodic(const Duration(seconds: 1), (_) {
       setCountdown();
     });
   }
 
   void setCountdown() {
-    if (mounted) {
-      setState(() {
-        final seconds = flashsaleCountdownDuration.inSeconds - 1;
-        if (seconds < 1) {
-          flashsaleCountdownTimer?.cancel();
-        } else {
-          flashsaleCountdownDuration = Duration(seconds: seconds);
-        }
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      final seconds = flashsaleCountdownDuration.inSeconds - 1;
+      if (seconds < 1) {
+        flashsaleCountdownTimer?.cancel();
+      } else {
+        flashsaleCountdownDuration = Duration(seconds: seconds);
+      }
+    });
   }
 
   @override
@@ -64,15 +65,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    String seconds = flashsaleCountdownDuration.inSeconds
+    final String seconds = flashsaleCountdownDuration.inSeconds
         .remainder(60)
         .toString()
         .padLeft(2, '0');
-    String minutes = flashsaleCountdownDuration.inMinutes
+    final String minutes = flashsaleCountdownDuration.inMinutes
         .remainder(60)
         .toString()
         .padLeft(2, '0');
-    String hours = flashsaleCountdownDuration.inHours
+    final String hours = flashsaleCountdownDuration.inHours
         .remainder(24)
         .toString()
         .padLeft(2, '0');
@@ -80,14 +81,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
           // 🔹 Hero Section
           Container(
             height: 190,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/background.jpg'),
                 fit: BoxFit.cover,
@@ -96,12 +97,12 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Container(
-                  margin: EdgeInsets.only(top: 26),
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  margin: const EdgeInsets.only(top: 26),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Find the best \noutfit for you.',
                         style: TextStyle(
                           color: Colors.white,
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                           CustomIconButtonWidget(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => EmptyCartPage()));
+                                  builder: (context) => const EmptyCartPage()));
                             },
                             value: 0,
                             icon: SvgPicture.asset(
@@ -126,10 +127,10 @@ class _HomePageState extends State<HomePage> {
                           CustomIconButtonWidget(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => MessagePage()));
+                                  builder: (context) => const MessagePage()));
                             },
                             value: 2,
-                            margin: EdgeInsets.only(left: 16),
+                            margin: const EdgeInsets.only(left: 16),
                             icon: SvgPicture.asset(
                               'assets/icons/Chat.svg',
                               color: Colors.white,
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => SearchPage(),
+                        builder: (context) => const SearchPage(),
                       ),
                     );
                   },
@@ -157,15 +158,15 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: MediaQuery.of(context).size.width,
             color: AppColor.secondary,
-            padding: EdgeInsets.only(top: 12, bottom: 24),
+            padding: const EdgeInsets.only(top: 12, bottom: 24),
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Category',
                         style: TextStyle(
                             color: Colors.white,
@@ -185,14 +186,15 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 12),
+                  margin: const EdgeInsets.only(top: 12),
                   height: 96,
                   child: ListView.separated(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: categoryData.length,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    separatorBuilder: (context, index) => SizedBox(width: 16),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 16),
                     itemBuilder: (context, index) {
                       return CategoryCard(
                         data: categoryData[index],
@@ -207,7 +209,7 @@ class _HomePageState extends State<HomePage> {
 
           // 🔹 Flash Sale Section
           Container(
-            margin: EdgeInsets.all(16),
+            margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColor.primary,
               borderRadius: BorderRadius.circular(10),
@@ -219,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Flash Sale',
                         style: TextStyle(
                           color: Colors.white,
@@ -231,10 +233,10 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           FlashsaleCountdownTile(digit: hours[0]),
                           FlashsaleCountdownTile(digit: hours[1]),
-                          Text(":", style: TextStyle(color: Colors.white)),
+                          const Text(":", style: TextStyle(color: Colors.white)),
                           FlashsaleCountdownTile(digit: minutes[0]),
                           FlashsaleCountdownTile(digit: minutes[1]),
-                          Text(":", style: TextStyle(color: Colors.white)),
+                          const Text(":", style: TextStyle(color: Colors.white)),
                           FlashsaleCountdownTile(digit: seconds[0]),
                           FlashsaleCountdownTile(digit: seconds[1]),
                         ],
@@ -242,20 +244,21 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 310,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    physics: BouncingScrollPhysics(),
+                    physics: const BouncingScrollPhysics(),
                     itemCount: productData.length,
                     itemBuilder: (context, index) {
+                      final product = productData[index];
                       return Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: ProductCard(
-                          name: productData[index].name,
-                          price: productData[index].price,
-                          rating: productData[index].rating ?? 4.0,
-                          imageUrl: productData[index].image,
+                          name: product.name,
+                          price: product.price,
+                          rating: product.rating ?? 4.0,
+                          imageUrl: product.image,
                           showWishlist: true,
                           showLike: true,
                         ),
@@ -268,7 +271,7 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // 🔹 Recommendation Section
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: 16, top: 16),
             child: Text(
               'Today\'s recommendation...',
@@ -279,20 +282,23 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Wrap(
               spacing: 16,
               runSpacing: 16,
               children: List.generate(
                 productData.length,
-                (index) => ProductCard(
-                  name: productData[index].name,
-                  price: productData[index].price,
-                  rating: productData[index].rating ?? 4.5,
-                  imageUrl: productData[index].image,
-                  showWishlist: true,
-                  showLike: true,
-                ),
+                (index) {
+                  final product = productData[index];
+                  return ProductCard(
+                    name: product.name,
+                    price: product.price,
+                    rating: product.rating ?? 4.5,
+                    imageUrl: product.image,
+                    showWishlist: true,
+                    showLike: true,
+                  );
+                },
               ),
             ),
           )
