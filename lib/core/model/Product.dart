@@ -15,15 +15,15 @@ class Product {
   String storeName;
 
   Product({
-    @required this.image,
-    @required this.name,
-    @required this.price,
-    @required this.rating,
-    @required this.description,
-    @required this.colors,
-    @required this.sizes,
-    @required this.reviews,
-    @required this.storeName,
+    required this.image,
+    required this.name,
+    required this.price,
+    required this.rating,
+    required this.description,
+    required this.colors,
+    required this.sizes,
+    required this.reviews,
+    required this.storeName,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
