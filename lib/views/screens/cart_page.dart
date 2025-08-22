@@ -15,6 +15,14 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   List<Cart> cartData = CartService.cartData;
 
+  double get totalPrice {
+    double total = 0;
+    for (var item in cartData) {
+      total += item.price * item.quantity;
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,14 +33,18 @@ class _CartPageState extends State<CartPage> {
         elevation: 0,
         title: Column(
           children: [
-            Text('Your Cart',
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600)),
-            Text('3 items',
-                style: TextStyle(
-                    fontSize: 10, color: Colors.black.withOpacity(0.7))),
+            Text(
+              'Your Cart',
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            ),
+            Text(
+              '${cartData.length} items',
+              style: TextStyle(
+                  fontSize: 10, color: Colors.black.withOpacity(0.7)),
+            ),
           ],
         ),
         leading: IconButton(
@@ -84,7 +96,7 @@ class _CartPageState extends State<CartPage> {
               Flexible(
                 flex: 6,
                 child: Text(
-                  'Rp 10,429,000',
+                  'Rp ${totalPrice.toStringAsFixed(0)}',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
@@ -117,7 +129,7 @@ class _CartPageState extends State<CartPage> {
               );
             },
             separatorBuilder: (context, index) => SizedBox(height: 16),
-            itemCount: 3,
+            itemCount: cartData.length,
           ),
           // Section 2 - Shipping Information
           Container(
@@ -335,7 +347,7 @@ class _CartPageState extends State<CartPage> {
                             Expanded(
                               flex: 4,
                               child: Text(
-                                '4 Items',
+                                '${cartData.length} Items',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: AppColor.secondary.withOpacity(0.7)),
@@ -344,7 +356,7 @@ class _CartPageState extends State<CartPage> {
                             Expanded(
                               flex: 4,
                               child: Text(
-                                'Rp 1,429,000',
+                                'Rp ${totalPrice.toStringAsFixed(0)}',
                                 textAlign: TextAlign.end,
                                 style: TextStyle(
                                     fontWeight: FontWeight.w600,
