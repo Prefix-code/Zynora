@@ -1,10 +1,12 @@
 class SearchHistory {
   String title;
 
-  SearchHistory({this.title});
+  SearchHistory({required this.title});
 
   factory SearchHistory.fromJson(Map<String, dynamic> json) {
-    return SearchHistory(title: json['title']);
+    return SearchHistory(
+      title: json['title'] ?? '',
+    );
   }
 }
 
@@ -12,9 +14,15 @@ class PopularSearch {
   String title;
   String imageUrl;
 
-  PopularSearch({this.title, this.imageUrl});
+  PopularSearch({
+    required this.title,
+    required this.imageUrl,
+  });
 
   factory PopularSearch.fromJson(Map<String, dynamic> json) {
-    return PopularSearch(title: json['title'], imageUrl: json['image_url']);
+    return PopularSearch(
+      title: json['title'] ?? '',
+      imageUrl: json['image_url'] ?? '',
+    );
   }
 }
