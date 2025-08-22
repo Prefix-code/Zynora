@@ -7,10 +7,10 @@ class UserNotification {
   DateTime dateTime;
 
   UserNotification({
-    @required this.imageUrl,
-    @required this.title,
-    @required this.description,
-    @required this.dateTime,
+    required this.imageUrl,
+    required this.title,
+    required this.description,
+    required this.dateTime,
   });
 
   factory UserNotification.fromJson(Map<String, dynamic> json) {
