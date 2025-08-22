@@ -6,9 +6,9 @@ class Message {
 
   Message({
     this.isReaded,
-    this.shopLogoUrl,
+    required this.shopLogoUrl,
     this.message,
-    this.shopName,
+    required this.shopName,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) {
