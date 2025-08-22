@@ -7,10 +7,10 @@ class Cart {
   int count;
 
   Cart({
-    @required this.image,
-    @required this.name,
-    @required this.price,
-    @required this.count,
+    required this.image,
+    required this.name,
+    required this.price,
+    required this.count,
   });
 
   factory Cart.fromJson(Map<String, dynamic> json) {
