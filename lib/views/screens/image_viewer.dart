@@ -5,14 +5,28 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ImageViewer extends StatefulWidget {
   final List<String> imageUrl;
-  ImageViewer({@required this.imageUrl});
+
+  const ImageViewer({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
-  _ImageViewerState createState() => _ImageViewerState();
+  State<ImageViewer> createState() => _ImageViewerState();
 }
 
 class _ImageViewerState extends State<ImageViewer> {
-  PageController productImageSlider = PageController();
+  late final PageController productImageSlider;
+
+  @override
+  void initState() {
+    super.initState();
+    productImageSlider = PageController();
+  }
+
+  @override
+  void dispose() {
+    productImageSlider.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,46 +36,47 @@ class _ImageViewerState extends State<ImageViewer> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+          onPressed: () => Navigator.of(context).pop(),
           icon: SvgPicture.asset(
             'assets/icons/Arrow-left.svg',
             color: Colors.white,
           ),
-        ), systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
       body: Stack(
         children: [
-          PageView(
-            physics: BouncingScrollPhysics(),
+          // Image slider
+          PageView.builder(
+            physics: const BouncingScrollPhysics(),
             controller: productImageSlider,
-            children: List.generate(
-              widget.imageUrl.length,
-              (index) => Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
+            itemCount: widget.imageUrl.length,
+            itemBuilder: (context, index) {
+              return SizedBox.expand(
                 child: Image.asset(
                   widget.imageUrl[index],
                   fit: BoxFit.contain,
                 ),
-              ),
-            ),
+              );
+            },
           ),
 
-          // indicator
+          // Indicator
           Positioned(
-            bottom: 16,
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              alignment: Alignment.center,
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: Center(
               child: SmoothPageIndicator(
                 controller: productImageSlider,
                 count: widget.imageUrl.length,
                 effect: ExpandingDotsEffect(
-                  dotColor: Colors.white.withOpacity(0.2),
-                  activeDotColor: Colors.white.withOpacity(0.2),
+                  dotColor: Colors.white.withOpacity(0.3),
+                  activeDotColor: Colors.white,
                   dotHeight: 8,
+                  dotWidth: 8,
+                  expansionFactor: 3,
+                  spacing: 6,
                 ),
               ),
             ),
