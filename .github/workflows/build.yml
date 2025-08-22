@@ -5,41 +5,52 @@ on:
     branches:
       - main
   pull_request:
+    branches:
+      - main
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
 
     steps:
+      # Repo checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Java setup
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
+      # Flutter setup
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.22.0'
 
+      # Dependencies install
       - name: Install dependencies
         run: flutter pub get
 
+      # 🔎 Analyze project
       - name: Analyze project
-          run: flutter analyze
-      
+        run: flutter analyze
+
+      # Debugging ke liye doctor info
       - name: Flutter doctor info
         run: flutter doctor -v
 
+      # Debugging ke liye outdated packages
       - name: Check outdated packages
         run: flutter pub outdated || true
 
+      # Debug build
       - name: Build Android APK (Debug)
         run: flutter build apk --debug
 
+      # Debug APK upload
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
