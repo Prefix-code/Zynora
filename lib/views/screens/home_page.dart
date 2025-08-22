@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:marketky/constant/app_color.dart';
@@ -14,7 +13,6 @@ import 'package:marketky/views/widgets/category_card.dart';
 import 'package:marketky/views/widgets/custom_icon_button_widget.dart';
 import 'package:marketky/views/widgets/dummy_search_widget_1.dart';
 import 'package:marketky/views/widgets/flashsale_countdown_tile.dart';
-import 'package:marketky/views/widgets/item_card.dart';
 import '../widgets/product_card.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   List<Category> categoryData = CategoryService.categoryData;
   List<Product> productData = ProductService.productData;
 
-  Timer flashsaleCountdownTimer;
+  Timer? flashsaleCountdownTimer;
   Duration flashsaleCountdownDuration = Duration(
     hours: 24 - DateTime.now().hour,
     minutes: 60 - DateTime.now().minute,
@@ -40,18 +38,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void startTimer() {
-    Timer.periodic(Duration(seconds: 1), (_) {
+    flashsaleCountdownTimer = Timer.periodic(Duration(seconds: 1), (_) {
       setCountdown();
     });
   }
 
   void setCountdown() {
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         final seconds = flashsaleCountdownDuration.inSeconds - 1;
-
         if (seconds < 1) {
-          flashsaleCountdownTimer.cancel();
+          flashsaleCountdownTimer?.cancel();
         } else {
           flashsaleCountdownDuration = Duration(seconds: seconds);
         }
@@ -61,10 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    if (flashsaleCountdownTimer != null) {
-      flashsaleCountdownTimer.cancel();
-    }
-
+    flashsaleCountdownTimer?.cancel();
     super.dispose();
   }
 
@@ -106,14 +100,12 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Find the best \noutfit for you.',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 22,
-                          height: 150 / 100,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Poppins',
                         ),
@@ -167,8 +159,6 @@ class _HomePageState extends State<HomePage> {
             color: AppColor.secondary,
             padding: EdgeInsets.only(top: 12, bottom: 24),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -190,14 +180,10 @@ class _HomePageState extends State<HomePage> {
                               color: Colors.white.withOpacity(0.7),
                               fontWeight: FontWeight.w400),
                         ),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                        ),
                       ),
                     ],
                   ),
                 ),
-                // Category list
                 Container(
                   margin: EdgeInsets.only(top: 12),
                   height: 96,
@@ -206,10 +192,7 @@ class _HomePageState extends State<HomePage> {
                     itemCount: categoryData.length,
                     physics: BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) {
-                      return SizedBox(width: 16);
-                    },
+                    separatorBuilder: (context, index) => SizedBox(width: 16),
                     itemBuilder: (context, index) {
                       return CategoryCard(
                         data: categoryData[index],
@@ -242,7 +225,6 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          fontFamily: 'Poppins',
                         ),
                       ),
                       Row(
@@ -260,31 +242,26 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 310,
-                        child: ListView(
-                          shrinkWrap: true,
-                          physics: BouncingScrollPhysics(),
-                          scrollDirection: Axis.horizontal,
-                          children: List.generate(
-                            productData.length,
-                            (index) => Padding(
-                              padding: const EdgeInsets.only(left: 16.0),
-                              child: ProductCard(
-                                name: productData[index].name,
-                                price: productData[index].price,
-                                rating: productData[index].rating ?? 4.0,
-                                imageUrl: productData[index].image,
-                              ),
-                            ),
-                          ),
+                Container(
+                  height: 310,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: BouncingScrollPhysics(),
+                    itemCount: productData.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: ProductCard(
+                          name: productData[index].name,
+                          price: productData[index].price,
+                          rating: productData[index].rating ?? 4.0,
+                          imageUrl: productData[index].image,
+                          showWishlist: true,
+                          showLike: true,
                         ),
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
@@ -294,14 +271,13 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.only(left: 16, top: 16),
             child: Text(
-              'Todays recommendation...',
+              'Today\'s recommendation...',
               style: TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
                   fontWeight: FontWeight.w400),
             ),
           ),
-
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Wrap(
@@ -314,6 +290,8 @@ class _HomePageState extends State<HomePage> {
                   price: productData[index].price,
                   rating: productData[index].rating ?? 4.5,
                   imageUrl: productData[index].image,
+                  showWishlist: true,
+                  showLike: true,
                 ),
               ),
             ),
