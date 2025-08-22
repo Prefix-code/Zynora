@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
-
 class UserNotification {
-  String imageUrl;
-  String title;
-  String description;
-  DateTime dateTime;
+  final String imageUrl;
+  final String title;
+  final String description;
+  final DateTime dateTime;
 
   UserNotification({
     required this.imageUrl,
@@ -15,10 +13,12 @@ class UserNotification {
 
   factory UserNotification.fromJson(Map<String, dynamic> json) {
     return UserNotification(
-      imageUrl: json['image_url'],
-      title: json['title'],
-      description: json['description'],
-      dateTime: DateTime.parse(json['date_time']),
+      imageUrl: json['image_url'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      dateTime: json['date_time'] != null && json['date_time'].toString().isNotEmpty
+          ? DateTime.tryParse(json['date_time']) ?? DateTime.now()
+          : DateTime.now(),
     );
   }
 }
