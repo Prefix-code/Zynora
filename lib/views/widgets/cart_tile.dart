@@ -5,13 +5,18 @@ import 'package:pecahan_rupiah/pecahan_rupiah.dart';
 
 class CartTile extends StatelessWidget {
   final Cart data;
-  CartTile({@required this.data});
+
+  const CartTile({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 80,
-      padding: EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 12),
+      padding: const EdgeInsets.only(top: 5, left: 5, bottom: 5, right: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -19,18 +24,21 @@ class CartTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Image
+          // Product Image
           Container(
             width: 70,
             height: 70,
-            margin: EdgeInsets.only(right: 20),
+            margin: const EdgeInsets.only(right: 20),
             decoration: BoxDecoration(
               color: AppColor.border,
               borderRadius: BorderRadius.circular(16),
-              image: DecorationImage(image: AssetImage(data.image[0]), fit: BoxFit.cover),
+              image: DecorationImage(
+                image: AssetImage(data.image.isNotEmpty ? data.image[0] : 'assets/images/placeholder.png'),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-          // Info
+          // Product Info
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -38,23 +46,31 @@ class CartTile extends StatelessWidget {
               children: [
                 // Product Name
                 Text(
-                  '${data.name}',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontFamily: 'poppins', color: AppColor.secondary),
+                  data.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'poppins',
+                    color: AppColor.secondary,
+                  ),
                 ),
-                // Product Price - Increment Decrement Button
+                // Product Price + Quantity Buttons
                 Container(
-                  margin: EdgeInsets.only(top: 4),
+                  margin: const EdgeInsets.only(top: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Product Price
                       Expanded(
                         child: Text(
-                          '${Pecahan.rupiah(value: data.price, withRp: true)}',
-                          style: TextStyle(fontWeight: FontWeight.w700, fontFamily: 'poppins', color: AppColor.primary),
+                          Pecahan.rupiah(value: data.price, withRp: true),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'poppins',
+                            color: AppColor.primary,
+                          ),
                         ),
                       ),
-                      // Increment Decrement Button
+                      // Increment / Decrement Buttons
                       Container(
                         height: 26,
                         width: 80,
@@ -66,7 +82,8 @@ class CartTile extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                print('minus');
+                                // TODO: Decrement quantity logic
+                                debugPrint('minus pressed');
                               },
                               child: Container(
                                 width: 26,
@@ -76,25 +93,32 @@ class CartTile extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                   color: AppColor.primarySoft,
                                 ),
-                                child: Text(
+                                child: const Text(
                                   '-',
-                                  style: TextStyle(fontFamily: 'poppins', fontWeight: FontWeight.w500),
+                                  style: TextStyle(
+                                    fontFamily: 'poppins',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.symmetric(horizontal: 8),
+                              margin: const EdgeInsets.symmetric(horizontal: 8),
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
                                   '${data.count}',
-                                  style: TextStyle(fontFamily: 'poppins', fontWeight: FontWeight.w500),
+                                  style: const TextStyle(
+                                    fontFamily: 'poppins',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
                             InkWell(
                               onTap: () {
-                                print('plus');
+                                // TODO: Increment quantity logic
+                                debugPrint('plus pressed');
                               },
                               child: Container(
                                 width: 26,
@@ -104,9 +128,12 @@ class CartTile extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(8),
                                   color: AppColor.primarySoft,
                                 ),
-                                child: Text(
+                                child: const Text(
                                   '+',
-                                  style: TextStyle(fontFamily: 'poppins', fontWeight: FontWeight.w500),
+                                  style: TextStyle(
+                                    fontFamily: 'poppins',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
