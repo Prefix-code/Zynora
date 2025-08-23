@@ -94,7 +94,9 @@ class _OrderSuccessPageState extends State<OrderSuccessPage>
               child: OutlinedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const OrdersPage()),
+                    MaterialPageRoute(
+                      builder: (context) => const OrdersPage(),
+                    ),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -122,7 +124,9 @@ class _OrderSuccessPageState extends State<OrderSuccessPage>
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const PageSwitcher()),
+                    MaterialPageRoute(
+                      builder: (context) => const PageSwitcher(),
+                    ),
                   );
                 },
                 style: ElevatedButton.styleFrom(
