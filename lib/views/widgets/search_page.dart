@@ -5,7 +5,7 @@ import 'package:marketky/views/widgets/real_search_widget.dart';
 class SearchPage extends StatelessWidget {
   final List<Product> products;
 
-  SearchPage({@required this.products});
+  SearchPage({required this.products});
 
   @override
   Widget build(BuildContext context) {
