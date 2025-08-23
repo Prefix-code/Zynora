@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:marketky/constant/app_color.dart';
 import 'package:marketky/views/screens/page_switcher.dart';
+import 'package:marketky/views/screens/orders_page.dart'; // 🔹 Import OrdersPage
 
 class OrderSuccessPage extends StatefulWidget {
   const OrderSuccessPage({super.key});
@@ -92,7 +93,9 @@ class _OrderSuccessPageState extends State<OrderSuccessPage>
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  // TODO: Navigate to Orders Page
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const OrdersPage()),
+                  );
                 },
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 18),
