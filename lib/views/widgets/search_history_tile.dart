@@ -3,19 +3,23 @@ import 'package:marketky/constant/app_color.dart';
 import 'package:marketky/core/model/Search.dart';
 
 class SearchHistoryTile extends StatelessWidget {
-  SearchHistoryTile({@required this.data, @required this.onTap});
-
   final SearchHistory data;
-  final Function onTap;
+  final VoidCallback onTap; // ✅ Better callback type
+
+  const SearchHistoryTile({
+    Key? key,
+    required this.data,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell( // ✅ Better touch feedback
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
           color: Colors.white,
           border: Border(
             bottom: BorderSide(
@@ -24,7 +28,16 @@ class SearchHistoryTile extends StatelessWidget {
             ),
           ),
         ),
-        child: Text('${data.title}'),
+        child: Text(
+          data.title,
+          style: const TextStyle(
+            fontSize: 14,
+            color: AppColor.secondary,
+            fontFamily: 'Poppins',
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis, // ✅ Avoids text overflow
+        ),
       ),
     );
   }
