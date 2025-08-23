@@ -9,6 +9,8 @@ import 'package:marketky/views/widgets/popular_search_card.dart';
 import 'package:marketky/views/widgets/search_history_tile.dart';
 
 class SearchPage extends StatefulWidget {
+  const SearchPage({Key? key}) : super(key: key);
+
   @override
   _SearchPageState createState() => _SearchPageState();
 }
@@ -16,6 +18,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   List<SearchHistory> listSearchHistory = SearchService.listSearchHistory;
   List<PopularSearch> listPopularSearch = SearchService.listPopularSearch;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +27,7 @@ class _SearchPageState extends State<SearchPage> {
         centerTitle: false,
         backgroundColor: AppColor.primary,
         elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: SvgPicture.asset(
@@ -31,52 +35,64 @@ class _SearchPageState extends State<SearchPage> {
             color: Colors.white,
           ),
         ),
-        title: Container(
+        title: SizedBox(
           height: 40,
           child: TextField(
             autofocus: false,
-            style: TextStyle(fontSize: 14, color: Colors.white),
+            style: const TextStyle(fontSize: 14, color: Colors.white),
             decoration: InputDecoration(
-              hintStyle: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.3)),
-              hintText: 'Find a products...',
-              prefixIcon: Container(
-                padding: EdgeInsets.all(10),
-                child: SvgPicture.asset('assets/icons/Search.svg', color: Colors.white),
+              hintStyle: TextStyle(
+                fontSize: 14,
+                color: Colors.white54,
               ),
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              hintText: 'Find a product...',
+              prefixIcon: Padding(
+                padding: const EdgeInsets.all(10),
+                child: SvgPicture.asset(
+                  'assets/icons/Search.svg',
+                  color: Colors.white,
+                ),
+              ),
+              contentPadding: EdgeInsets.zero,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.transparent, width: 1),
                 borderRadius: BorderRadius.circular(16),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white.withOpacity(0.1), width: 1),
+                borderSide: BorderSide(
+                  color: Colors.white.withOpacity(0.1),
+                  width: 1,
+                ),
                 borderRadius: BorderRadius.circular(16),
               ),
               fillColor: Colors.white.withOpacity(0.1),
               filled: true,
             ),
           ),
-        ), systemOverlayStyle: SystemUiOverlayStyle.light,
+        ),
       ),
       body: ListView(
         shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         children: [
-          // Section 1 - Search History
+          // 🔹 Section 1 - Search History
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Search history...',
-                  style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+                  'Search history',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
               ListView.builder(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: listSearchHistory.length,
                 itemBuilder: (context, index) {
                   return SearchHistoryTile(
@@ -93,47 +109,69 @@ class _SearchPageState extends State<SearchPage> {
                   );
                 },
               ),
-              Container(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Delete search history',
-                    style: TextStyle(color: AppColor.secondary.withOpacity(0.5)),
-                  ),
+                  onPressed: () {
+                    setState(() {
+                      listSearchHistory.clear();
+                    });
+                  },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: AppColor.primary.withOpacity(0.3), backgroundColor: AppColor.primarySoft,
+                    backgroundColor: AppColor.primarySoft,
                     elevation: 0,
                     shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    ),
+                  ),
+                  child: Text(
+                    'Delete search history',
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.5),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-          // Section 2 - Popular Search
+
+          // 🔹 Section 2 - Popular Search
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(16),
                 child: Text(
-                  'Popular search.',
-                  style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w400),
+                  'Popular search',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ),
               Wrap(
-                direction: Axis.horizontal,
-                children: List.generate(listPopularSearch.length, (index) {
-                  return PopularSearchCard(
+                spacing: 8,
+                runSpacing: 8,
+                children: List.generate(
+                  listPopularSearch.length,
+                  (index) => PopularSearchCard(
                     data: listPopularSearch[index],
-                    onTap: () {},
-                  );
-                }),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SearchResultPage(
+                            searchKeyword: listPopularSearch[index].title,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
