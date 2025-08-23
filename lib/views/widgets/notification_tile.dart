@@ -4,63 +4,93 @@ import 'package:marketky/constant/app_color.dart';
 import 'package:marketky/core/model/Notification.dart';
 
 class NotificationTile extends StatelessWidget {
-  final Function onTap;
+  final VoidCallback onTap;
   final UserNotification data;
 
-  NotificationTile({
-    @required this.onTap,
-    @required this.data,
-  });
+  const NotificationTile({
+    Key? key,
+    required this.onTap,
+    required this.data,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      splashColor: AppColor.primarySoft.withOpacity(0.2), // ✅ better feedback than GestureDetector
+      borderRadius: BorderRadius.circular(8),
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: Colors.white,
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            bottom: BorderSide(color: AppColor.primarySoft, width: 1), // ✅ subtle separation
+          ),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
+            // 🔹 Image
             Container(
               width: 46,
               height: 46,
+              margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 color: AppColor.border,
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(image: AssetImage('${data.imageUrl}'), fit: BoxFit.cover),
+                image: DecorationImage(
+                  image: AssetImage(data.imageUrl),
+                  fit: BoxFit.cover,
+                ),
               ),
-              margin: EdgeInsets.only(right: 16),
             ),
-            // Info
+
+            // 🔹 Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title
                   Text(
-                    '${data.title}',
-                    style: TextStyle(color: AppColor.secondary, fontFamily: 'poppins', fontWeight: FontWeight.w500),
-                  ),
-                  // Description
-                  Container(
-                    margin: EdgeInsets.only(top: 2, bottom: 8),
-                    child: Text(
-                      '${data.description}',
-                      style: TextStyle(color: AppColor.secondary.withOpacity(0.7), fontSize: 12),
+                    data.title,
+                    style: const TextStyle(
+                      color: AppColor.secondary,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
                   ),
-                  // Datetime
+
+                  // Description
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4, bottom: 8),
+                    child: Text(
+                      data.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis, // ✅ prevent overflow
+                      style: TextStyle(
+                        color: AppColor.secondary.withOpacity(0.7),
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+
+                  // DateTime row
                   Row(
                     children: [
-                      SvgPicture.asset('assets/icons/Time Circle.svg', color: AppColor.secondary.withOpacity(0.7)),
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: Text(
-                          '${data.dateTime}',
-                          style: TextStyle(color: AppColor.secondary.withOpacity(0.7), fontSize: 12),
+                      SvgPicture.asset(
+                        'assets/icons/Time Circle.svg',
+                        width: 14,
+                        height: 14,
+                        color: AppColor.secondary.withOpacity(0.7),
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        data.dateTime,
+                        style: TextStyle(
+                          color: AppColor.secondary.withOpacity(0.7),
+                          fontSize: 12,
                         ),
                       ),
                     ],
