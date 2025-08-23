@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class DummySearchWidget1 extends StatelessWidget {
-  final VoidCallback onTap; // Function ko VoidCallback se replace kiya (null safety ke liye)
+// import karo product list aur search page
+import 'package:your_app/data/dummy_products.dart';  
+import 'package:your_app/views/widgets/search_page.dart';
 
-  const DummySearchWidget1({
-    Key? key,
-    required this.onTap, // required use kiya taaki ye hamesha pass ho
-  }) : super(key: key);
+class DummySearchWidget1 extends StatelessWidget {
+  const DummySearchWidget1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        // ✅ Navigation to SearchPage with product list
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SearchPage(
+              products: myProductList, // dummy_products.dart wali list
+            ),
+          ),
+        );
+      },
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 40,
