@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-// yaha import karo SearchPage aur product list wali file
+// Import SearchPage
 import 'package:your_app/views/widgets/search_page.dart';
-import 'package:your_app/models/product_model.dart'; // <-- yaha tumhari product list ka model/file
+
+// Import product model and dummy product list
+import 'package:your_app/models/product_model.dart';
+import 'package:your_app/data/dummy_products.dart';
 
 class DummySearchWidget2 extends StatelessWidget {
   const DummySearchWidget2({Key? key}) : super(key: key);
@@ -13,12 +16,12 @@ class DummySearchWidget2 extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          // yaha direct navigation karenge
+          // Jab user tap karega -> search page khulega
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => SearchPage(
-                products: myProductList, // tumhari product list
+                products: myProductList, // <-- yaha tumhari dummy product list
               ),
             ),
           );
