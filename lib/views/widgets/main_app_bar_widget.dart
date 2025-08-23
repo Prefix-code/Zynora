@@ -12,10 +12,11 @@ class MainAppBar extends StatefulWidget implements PreferredSizeWidget {
   final int cartValue;
   final int chatValue;
 
-  MainAppBar({
-    @required this.cartValue,
-    @required this.chatValue,
-  });
+  const MainAppBar({
+    Key? key,
+    required this.cartValue, // ✅ null-safety
+    required this.chatValue,
+  }) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(60);
@@ -29,44 +30,54 @@ class _MainAppBarState extends State<MainAppBar> {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      centerTitle: false,
       backgroundColor: AppColor.primary,
       elevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle.light, // ✅ moved up for clarity
+      titleSpacing: 0, // ✅ better alignment
       title: Row(
         children: [
-          DummySearchWidget2(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SearchPage(),
-                ),
-              );
-            },
+          // 🔍 Search Bar
+          Expanded(
+            child: DummySearchWidget2(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const SearchPage()),
+                );
+              },
+            ),
           ),
+
+          // 🛒 Cart Icon
           CustomIconButtonWidget(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => CartPage()));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const CartPage()),
+              );
             },
             value: widget.cartValue,
-            margin: EdgeInsets.only(left: 16),
+            margin: const EdgeInsets.only(left: 16),
             icon: SvgPicture.asset(
               'assets/icons/Bag.svg',
               color: Colors.white,
             ),
           ),
+
+          // 💬 Chat Icon
           CustomIconButtonWidget(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MessagePage()));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const MessagePage()),
+              );
             },
             value: widget.chatValue,
-            margin: EdgeInsets.only(left: 16),
+            margin: const EdgeInsets.only(left: 16),
             icon: SvgPicture.asset(
               'assets/icons/Chat.svg',
               color: Colors.white,
             ),
           ),
         ],
-      ), systemOverlayStyle: SystemUiOverlayStyle.light,
+      ),
     );
   }
 }
