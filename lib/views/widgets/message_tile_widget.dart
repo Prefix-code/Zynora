@@ -6,48 +6,79 @@ import 'package:marketky/views/screens/message_detail_page.dart';
 class MessageTileWidget extends StatelessWidget {
   final Message data;
 
-  MessageTileWidget({
-    @required this.data,
-  });
+  const MessageTileWidget({
+    Key? key,
+    required this.data,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => MessageDetailPage(data: data)));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => MessageDetailPage(data: data),
+          ),
+        );
       },
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        width: double.infinity, // ✅ cleaner than MediaQuery
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: (data.isReaded == true) ? Colors.white : AppColor.primarySoft,
-          border: Border(bottom: BorderSide(color: AppColor.primarySoft, width: 1)),
+          color: data.isReaded ? Colors.white : AppColor.primarySoft,
+          border: Border(
+            bottom: BorderSide(color: AppColor.primarySoft, width: 1),
+          ),
         ),
         child: Row(
           children: [
+            // 🔹 Shop Logo
             Container(
               width: 46,
               height: 46,
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(right: 16),
+              margin: const EdgeInsets.only(right: 16),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(image: AssetImage(data.shopLogoUrl)),
+                image: DecorationImage(
+                  image: AssetImage(data.shopLogoUrl),
+                  fit: BoxFit.cover, // ✅ image crop avoid
+                ),
               ),
             ),
+
+            // 🔹 Shop Name & Message
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${data.shopName}', style: TextStyle(color: AppColor.secondary, fontFamily: 'poppins', fontWeight: FontWeight.w500)),
-                  SizedBox(height: 2),
-                  Text('${data.message}', style: TextStyle(color: AppColor.secondary.withOpacity(0.7), fontSize: 12)),
+                  Text(
+                    data.shopName,
+                    style: const TextStyle(
+                      color: AppColor.secondary,
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    data.message,
+                    maxLines: 1, // ✅ overflow prevent
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColor.secondary.withOpacity(0.7),
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ),
             ),
-            Icon(
+
+            // 🔹 Arrow Icon
+            const Icon(
               Icons.arrow_forward_ios,
               color: AppColor.border,
+              size: 16, // ✅ thoda chhota aur neat
             ),
           ],
         ),
