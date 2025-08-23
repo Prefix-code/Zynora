@@ -4,18 +4,25 @@ import 'package:marketky/constant/app_color.dart';
 
 class RatingTag extends StatelessWidget {
   final double value;
-  final EdgeInsetsGeometry margin;
-  RatingTag({@required this.value, this.margin});
+  final EdgeInsetsGeometry? margin;
+
+  const RatingTag({
+    Key? key,
+    required this.value,
+    this.margin,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
       margin: margin,
-      padding: EdgeInsets.only(top: 4, bottom: 4, left: 5, right: 8),
-      decoration: BoxDecoration(color: AppColor.secondary, borderRadius: BorderRadius.circular(8)),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColor.secondary,
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // ✅ shrink to content instead of fixed width
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SvgPicture.asset(
@@ -23,12 +30,13 @@ class RatingTag extends StatelessWidget {
             width: 14,
             height: 14,
           ),
-          SizedBox(width: 4),
+          const SizedBox(width: 4),
           Text(
-            '$value',
-            style: TextStyle(
+            value.toStringAsFixed(1), // ✅ format rating like 4.5 instead of 4.500000
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 12,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
