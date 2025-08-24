@@ -3,17 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:marketky/constant/app_color.dart';
 import 'package:marketky/core/model/Product.dart';
 import 'package:marketky/views/screens/image_viewer.dart';
-import 'package:marketky/views/screens/reviews_page.dart';
 import 'package:marketky/views/widgets/custom_app_bar.dart';
 import 'package:marketky/views/widgets/modals/add_to_cart_modal.dart';
 import 'package:marketky/views/widgets/rating_tag.dart';
-import 'package:marketky/views/widgets/review_tile.dart';
-import 'package:marketky/views/widgets/selectable_circle_color.dart';
-import 'package:marketky/views/widgets/selectable_circle_size.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:marketky/utils/currency_formatter.dart'; // ✅ INR formatter
 
-// ✅ INR currency formatter helper import
-import 'package:marketky/core/utils/currency_formatter.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
@@ -44,7 +39,6 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
         child: Row(
           children: [
-            // Chat button
             Container(
               width: 64,
               height: 64,
@@ -64,7 +58,6 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
             ),
-            // Add to cart button
             Expanded(
               child: SizedBox(
                 height: 64,
@@ -165,7 +158,6 @@ class _ProductDetailState extends State<ProductDetail> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Product name & rating
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -187,9 +179,8 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
                 const SizedBox(height: 8),
-                // ✅ Price in INR
                 Text(
-                  formatCurrency(product.price),
+                  CurrencyFormatter.format(product.price), // ✅ INR format
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -198,7 +189,6 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                // Product description
                 Text(
                   product.description ??
                       'No description available for this product.',
@@ -211,7 +201,7 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
 
-          // ✅ Yaha se aage ka code (color picker, size picker, reviews, etc.) same hi rahega
+          // ✅ baki code same rehne do (colors, sizes, reviews, etc.)
         ],
       ),
     );
