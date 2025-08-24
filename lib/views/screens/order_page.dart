@@ -5,6 +5,13 @@ class OrdersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 🔹 Dummy Orders (Future me ye API se aayenge)
+    final orders = [
+      {"id": "ORD12345", "status": "Delivered", "date": "20 Aug 2025", "price": 1299},
+      {"id": "ORD12346", "status": "Processing", "date": "21 Aug 2025", "price": 799},
+      {"id": "ORD12347", "status": "Shipped", "date": "22 Aug 2025", "price": 2499},
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -14,33 +21,18 @@ class OrdersPage extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         elevation: 0,
       ),
-      body: ListView(
+      body: ListView.builder(
         padding: const EdgeInsets.all(16),
-        children: [
-          // 🔹 Dummy Order Card 1
-          _buildOrderCard(
-            orderId: "ORD12345",
-            status: "Delivered",
-            date: "20 Aug 2025",
-            price: "₹1,299",
-          ),
-
-          // 🔹 Dummy Order Card 2
-          _buildOrderCard(
-            orderId: "ORD12346",
-            status: "Processing",
-            date: "21 Aug 2025",
-            price: "₹799",
-          ),
-
-          // 🔹 Dummy Order Card 3
-          _buildOrderCard(
-            orderId: "ORD12347",
-            status: "Shipped",
-            date: "22 Aug 2025",
-            price: "₹2,499",
-          ),
-        ],
+        itemCount: orders.length,
+        itemBuilder: (context, index) {
+          final order = orders[index];
+          return _buildOrderCard(
+            orderId: order["id"].toString(),
+            status: order["status"].toString(),
+            date: order["date"].toString(),
+            price: "₹${order["price"]}", // ✅ Indian Rupees
+          );
+        },
       ),
     );
   }
