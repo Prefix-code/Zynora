@@ -11,7 +11,9 @@ import 'package:marketky/views/widgets/review_tile.dart';
 import 'package:marketky/views/widgets/selectable_circle_color.dart';
 import 'package:marketky/views/widgets/selectable_circle_size.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:intl/intl.dart'; // ✅ INR format ke liye
+
+// ✅ INR currency formatter helper import
+import 'package:marketky/core/utils/currency_formatter.dart';
 
 class ProductDetail extends StatefulWidget {
   final Product product;
@@ -23,12 +25,6 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   final PageController productImageSlider = PageController();
-
-  /// ✅ INR formatter function
-  String formatCurrency(num value) {
-    final format = NumberFormat.currency(locale: 'en_IN', symbol: '₹');
-    return format.format(value);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +44,7 @@ class _ProductDetailState extends State<ProductDetail> {
         ),
         child: Row(
           children: [
+            // Chat button
             Container(
               width: 64,
               height: 64,
@@ -67,6 +64,7 @@ class _ProductDetailState extends State<ProductDetail> {
                 ),
               ),
             ),
+            // Add to cart button
             Expanded(
               child: SizedBox(
                 height: 64,
@@ -167,6 +165,7 @@ class _ProductDetailState extends State<ProductDetail> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Product name & rating
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -188,8 +187,9 @@ class _ProductDetailState extends State<ProductDetail> {
                   ],
                 ),
                 const SizedBox(height: 8),
+                // ✅ Price in INR
                 Text(
-                  formatCurrency(product.price), // ✅ INR me dikh raha hai
+                  formatCurrency(product.price),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w700,
@@ -198,6 +198,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                 ),
                 const SizedBox(height: 14),
+                // Product description
                 Text(
                   product.description ??
                       'No description available for this product.',
@@ -210,7 +211,7 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
 
-          // ✅ baki code same rahega (color picker, size picker, reviews, etc.)
+          // ✅ Yaha se aage ka code (color picker, size picker, reviews, etc.) same hi rahega
         ],
       ),
     );
