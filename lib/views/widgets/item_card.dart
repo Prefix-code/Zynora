@@ -3,7 +3,7 @@ import 'package:marketky/constant/app_color.dart';
 import 'package:marketky/core/model/Product.dart';
 import 'package:marketky/views/screens/product_detail.dart';
 import 'package:marketky/views/widgets/rating_tag.dart';
-import 'package:pecahan_rupiah/pecahan_rupiah.dart';
+import 'package:marketky/utils/currency_formatter.dart'; // ✅ use this
 
 class ItemCard extends StatelessWidget {
   final Product product;
@@ -12,7 +12,7 @@ class ItemCard extends StatelessWidget {
 
   const ItemCard({
     Key? key,
-    required this.product, // ✅ null-safety
+    required this.product,
     this.titleColor = Colors.black,
     this.priceColor = AppColor.primary,
   }) : super(key: key);
@@ -32,7 +32,6 @@ class ItemCard extends StatelessWidget {
       child: Container(
         width: itemWidth,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 🖼️ Product Image
@@ -44,7 +43,11 @@ class ItemCard extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 image: DecorationImage(
-                  image: AssetImage(product.image.first), // ✅ safer
+                  image: AssetImage(
+                    product.image.isNotEmpty
+                        ? product.image.first
+                        : 'assets/images/placeholder.png', // ✅ Safe check
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -60,9 +63,31 @@ class ItemCard extends StatelessWidget {
                   // Product Name
                   Text(
                     product.name,
-                    maxLines: 1, // ✅ avoid overflow
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       color: titleColor,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+
+                  // Product Price (₹ INR)
+                  Text(
+                    CurrencyFormatter.format(product.price), // ✅ Indian Rupee
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: priceColor,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
