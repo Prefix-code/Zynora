@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marketky/constant/app_color.dart';
 import 'package:marketky/core/model/Cart.dart';
-import 'package:pecahan_rupiah/pecahan_rupiah.dart';
+import 'package:marketky/utils/currency_formatter.dart'; // ✅ apna formatter import
 
 class CartTile extends StatelessWidget {
   final Cart data;
@@ -24,7 +24,7 @@ class CartTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Product Image
+          // 🖼 Product Image
           Container(
             width: 70,
             height: 70,
@@ -33,18 +33,22 @@ class CartTile extends StatelessWidget {
               color: AppColor.border,
               borderRadius: BorderRadius.circular(16),
               image: DecorationImage(
-                image: AssetImage(data.image.isNotEmpty ? data.image[0] : 'assets/images/placeholder.png'),
+                image: AssetImage(
+                  data.image.isNotEmpty
+                      ? data.image[0]
+                      : 'assets/images/placeholder.png',
+                ),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // Product Info
+          // 📌 Product Info
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Product Name
+                // 🔹 Product Name
                 Text(
                   data.name,
                   style: const TextStyle(
@@ -53,16 +57,16 @@ class CartTile extends StatelessWidget {
                     color: AppColor.secondary,
                   ),
                 ),
-                // Product Price + Quantity Buttons
+                // 🔹 Product Price + Quantity Buttons
                 Container(
                   margin: const EdgeInsets.only(top: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Product Price
+                      // 💰 Product Price
                       Expanded(
                         child: Text(
-                          Pecahan.rupiah(value: data.price, withRp: true),
+                          CurrencyFormatter.format(data.price), // ✅ formatter use
                           style: const TextStyle(
                             fontWeight: FontWeight.w700,
                             fontFamily: 'poppins',
@@ -70,7 +74,7 @@ class CartTile extends StatelessWidget {
                           ),
                         ),
                       ),
-                      // Increment / Decrement Buttons
+                      // ➕➖ Quantity Buttons
                       Container(
                         height: 26,
                         width: 80,
@@ -103,7 +107,8 @@ class CartTile extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 8),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 8),
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
