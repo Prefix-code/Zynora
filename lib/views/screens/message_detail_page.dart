@@ -17,10 +17,26 @@ class MessageDetailPage extends StatefulWidget {
 }
 
 class _MessageDetailPageState extends State<MessageDetailPage> {
+  final TextEditingController _controller = TextEditingController();
+  final List<Map<String, dynamic>> _messages = [];
+
+  void _sendMessage() {
+    if (_controller.text.trim().isEmpty) return;
+
+    setState(() {
+      _messages.insert(0, {
+        "chat": _controller.text.trim(),
+        "time": TimeOfDay.now().format(context),
+        "isMe": true,
+      });
+    });
+    _controller.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true, // ✅ Fix for keyboard overlap
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
@@ -71,50 +87,24 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
         children: [
           // Section 1 - Chat
           Expanded(
-            child: ListView(
+            child: ListView.builder(
               padding: const EdgeInsets.all(16),
               physics: const BouncingScrollPhysics(),
               reverse: true,
-              children: const [
-                MyBubbleChatWidget(
-                  chat:
-                      'Lorem ipsum dolor ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-                  time: '10:48',
-                ),
-                SenderBubbleChatWidget(
-                  chat:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, ad minim veniam',
-                  time: '10:48',
-                ),
-                MyBubbleChatWidget(
-                  chat:
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-                  time: '10:48',
-                ),
-                SenderBubbleChatWidget(
-                  chat:
-                      'Log elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-                  time: '10:48',
-                ),
-                MyBubbleChatWidget(
-                  chat:
-                      'por incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-                  time: '10:48',
-                ),
-                SenderBubbleChatWidget(
-                  chat:
-                      'Lorem ipsum dpor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam',
-                  time: '10:48',
-                ),
-              ],
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final msg = _messages[index];
+                return msg["isMe"]
+                    ? MyBubbleChatWidget(chat: msg["chat"], time: msg["time"])
+                    : SenderBubbleChatWidget(chat: msg["chat"], time: msg["time"]);
+              },
             ),
           ),
 
           // Section 2 - Chat Bar
           Container(
             width: MediaQuery.of(context).size.width,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(color: AppColor.border, width: 1),
@@ -126,26 +116,23 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                 // TextField
                 Expanded(
                   child: TextField(
+                    controller: _controller,
                     maxLines: null,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.camera_alt_outlined,
-                          color: AppColor.primary,
-                        ),
+                        onPressed: () {
+                          // 📸 Future feature: camera integration
+                        },
+                        icon: Icon(Icons.camera_alt_outlined, color: AppColor.primary),
                       ),
-                      hintText: 'Type a message here...',
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 14),
+                      hintText: 'Type a message...',
+                      contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor.border, width: 1),
+                        borderSide: BorderSide(color: AppColor.border, width: 1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                            color: AppColor.border, width: 1),
+                        borderSide: BorderSide(color: AppColor.border, width: 1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
@@ -157,7 +144,7 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                   width: 42,
                   height: 42,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _sendMessage,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColor.primary,
                       padding: EdgeInsets.zero,
@@ -166,19 +153,11 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
                       ),
                       shadowColor: Colors.transparent,
                     ),
-                    child: const Icon(
-                      Icons.send_rounded,
-                      color: Colors.white,
-                      size: 18,
-                    ),
+                    child: const Icon(Icons.send_rounded, color: Colors.white, size: 18),
                   ),
                 )
               ],
             ),
-          ),
-          Container(
-            height: MediaQuery.of(context).viewInsets.bottom,
-            color: Colors.transparent,
           ),
         ],
       ),
@@ -186,15 +165,14 @@ class _MessageDetailPageState extends State<MessageDetailPage> {
   }
 }
 
+// -------------------- CHAT BUBBLES --------------------
+
 class MyBubbleChatWidget extends StatelessWidget {
   final String chat;
   final String time;
 
-  const MyBubbleChatWidget({
-    Key? key,
-    required this.chat,
-    required this.time,
-  }) : super(key: key);
+  const MyBubbleChatWidget({Key? key, required this.chat, required this.time})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -205,15 +183,11 @@ class MyBubbleChatWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Text(
-            time,
-            style: TextStyle(color: AppColor.secondary.withOpacity(0.5)),
-          ),
+          Text(time, style: TextStyle(color: AppColor.secondary.withOpacity(0.5))),
           Container(
             margin: const EdgeInsets.only(left: 16),
             width: MediaQuery.of(context).size.width * 0.65,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: const BoxDecoration(
               color: AppColor.primary,
               borderRadius: BorderRadius.only(
@@ -222,12 +196,9 @@ class MyBubbleChatWidget extends StatelessWidget {
                 bottomRight: Radius.circular(8),
               ),
             ),
-            child: Text(
-              chat,
-              textAlign: TextAlign.right,
-              style:
-                  const TextStyle(color: Colors.white, height: 1.5),
-            ),
+            child: Text(chat,
+                textAlign: TextAlign.right,
+                style: const TextStyle(color: Colors.white, height: 1.5)),
           ),
         ],
       ),
@@ -239,11 +210,8 @@ class SenderBubbleChatWidget extends StatelessWidget {
   final String chat;
   final String time;
 
-  const SenderBubbleChatWidget({
-    Key? key,
-    required this.chat,
-    required this.time,
-  }) : super(key: key);
+  const SenderBubbleChatWidget({Key? key, required this.chat, required this.time})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -256,8 +224,7 @@ class SenderBubbleChatWidget extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(right: 16),
             width: MediaQuery.of(context).size.width * 0.65,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: const BoxDecoration(
               color: AppColor.primarySoft,
               borderRadius: BorderRadius.only(
@@ -266,17 +233,11 @@ class SenderBubbleChatWidget extends StatelessWidget {
                 bottomRight: Radius.circular(8),
               ),
             ),
-            child: Text(
-              chat,
-              textAlign: TextAlign.left,
-              style: const TextStyle(
-                  color: AppColor.secondary, height: 1.5),
-            ),
+            child: Text(chat,
+                textAlign: TextAlign.left,
+                style: const TextStyle(color: AppColor.secondary, height: 1.5)),
           ),
-          Text(
-            time,
-            style: TextStyle(color: AppColor.secondary.withOpacity(0.5)),
-          ),
+          Text(time, style: TextStyle(color: AppColor.secondary.withOpacity(0.5))),
         ],
       ),
     );
